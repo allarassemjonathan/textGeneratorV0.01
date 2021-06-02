@@ -1,14 +1,7 @@
 import random
 import numpy as np
-def punc_handle(text):
-    p = '.-!?'
-    arr = text.split()
-    for i in range(len(arr)-1):
-        if arr[i][len(arr[i])-1] in p and len(arr[i])-1>0:
-            arr.insert(i+1, arr[i][len(arr[i])-1])
-            arr[i] = arr[i][0:len(arr[i])-1]
-    return arr
 
+#add the punctuation correctly in the array
 def add_p(text):
     p = '.-!?'
     arr = text.split()
@@ -17,7 +10,8 @@ def add_p(text):
             arr.insert(i+1, arr[i][len(arr[i])-1])
             arr[i] = arr[i][0:len(arr[i])-1]
     return arr
-    
+
+#build the label matrix
 def matrix_label(text):
     TML = []
     arr = add_p(text)
@@ -28,9 +22,10 @@ def matrix_label(text):
         TML.append(listt)
     return TML
 
+#build the transition matrix
 def transition_matrix(TML, text):
     TM = []
-    array = list(zip(punc_handle(text)[0:-1],punc_handle(text)[1:]))
+    array = list(zip(add_p(text)[0:-1],punc_handle(text)[1:]))
     for i in range(len(TML)):
         listt = []
         for e in TML[i]:
@@ -46,6 +41,7 @@ def transition_matrix(TML, text):
                 TM[i][c] /= total
     return TM
 
+#convert from (a,b) to ['a b']
 def convert(TML):
     listt = []
     for w in TML:
@@ -57,6 +53,7 @@ def convert(TML):
         listt.append(t)
     return listt
 
+#generate the text
 def random_walk(TM, TML, text):
     sentence = ''
     TMLd = convert(TML)
